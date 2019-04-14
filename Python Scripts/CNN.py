@@ -13,9 +13,9 @@ from sklearn.model_selection import train_test_split
 #See https://blog.manash.me/building-a-dead-simple-word-recognition-engine-using-convnet-in-keras-25e72c19c12b
 
 def get_train_test(split_ratio=0.7, random_state=42):
-    file = open("C:\\Users\\cedri\\Documents\\nsynth-train\\labels","r")
+    file = open("C:\\Users\\cedri\\Documents\\deep_learning_project\\labels","r")
     labels = json.load(file)
-    mfccs = "C:\\Users\\cedri\\Documents\\nsynth-train\\mfccs\\"
+    mfccs = "C:\\Users\\cedri\\Documents\\deep_learning_project\\mfccs\\"
     i = 0
     for filename, label in labels.items():
         filename,_,_ = filename.partition(".wav")

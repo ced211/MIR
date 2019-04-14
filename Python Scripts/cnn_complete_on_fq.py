@@ -1,0 +1,33 @@
+import numpy as np
+import os
+import json
+import matplotlib.pyplot as plt
+from matplotlib import cm
+
+import time
+import keras
+from keras.utils import to_categorical
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling2D
+from sklearn.model_selection import train_test_split
+from Mfcc_freq_seq import FqMfccSeq
+import copy
+
+if __name__ == "__main__":
+
+    train = FqMfccSeq("..\\spectrum-train\\","..\\nsynth-train")
+    valid = FqMfccSeq("..\\spectrum-valid\\","..\\nsynth-valid")
+    model = Sequential()
+    model.add(Conv1D(32, kernel_size= 4, activation='relu', input_shape=(train.x_shape[0],1)))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.25))
+    model.add(Dense(11, activation='softmax'))
+    model.compile(loss=keras.losses.categorical_crossentropy,
+                optimizer=keras.optimizers.Adadelta(),
+                metrics=['accuracy'])
+    checkpoint = keras.callbacks.ModelCheckpoint("..\\models\\conv-spectrum-fq\\models-{epoch:02d}.hdf5", monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
+    model.fit_generator(train, epochs=train.__len__(), verbose=1, validation_data=valid,callbacks=[checkpoint])
+    model.save("complete_model.model")
