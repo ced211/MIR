@@ -5,11 +5,10 @@ import keras
 from keras.utils import Sequence
 from keras.utils import to_categorical
 from random import shuffle
-
 class Mfcc(Sequence):
     batch_size = 1000
 
-    def __init__(self,mfcc_directory,labels_directory):
+    def __init__(self,mfcc_directory,labels_directory,batch_size = 1000):
         file = open(labels_directory + "\\instrument_families","r")
         self.families = json.load(file)
         self.filenames = list(self.families.keys())
@@ -18,6 +17,7 @@ class Mfcc(Sequence):
         shuffle(self.filenames)
         x = np.load(self.mfcc_dir + filename + ".npy")
         self.x_shape = x.shape
+        self.batch_size = batch_size
 
     def __len__(self):
         return int(np.ceil(len(self.filenames) / float(self.batch_size)))
@@ -36,6 +36,7 @@ class Mfcc(Sequence):
         batch_x = batch_x.reshape((len(batch_y),-1,x.shape[1]))
         batch_x = batch_x.reshape(batch_x.shape[0], batch_x.shape[1], batch_x.shape[2], 1)
         batch_y = to_categorical(np.array(batch_y),num_classes=11)
+
         return batch_x,batch_y
             
 

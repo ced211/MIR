@@ -10,13 +10,13 @@ from keras.utils import to_categorical
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D
 from sklearn.model_selection import train_test_split
-from Mfcc_freq_seq import FqMfccSeq
+from mfcc_time_seq import TimeMfccSeq
 import copy
 
 if __name__ == "__main__":
 
-    train = FqMfccSeq("..\\spectrum-train\\","..\\nsynth-train")
-    valid = FqMfccSeq("..\\spectrum-valid\\","..\\nsynth-valid")
+    train = TimeMfccSeq("..\\spectrum-train\\","..\\nsynth-train")
+    valid = TimeMfccSeq("..\\spectrum-valid\\","..\\nsynth-valid")
     model = Sequential()
     model.add(Conv1D(32, kernel_size= 4, activation='relu', input_shape=(train.x_shape[0],1)))
     model.add(MaxPooling1D(pool_size=4))

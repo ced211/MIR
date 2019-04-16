@@ -7,7 +7,7 @@ from keras.utils import to_categorical
 from random import shuffle
 
 class TimeMfccSeq(Sequence):
-    batch_size = 5000
+    batch_size = 1000
 
     def __init__(self,mfcc_directory,labels_directory):
         file = open(labels_directory + "\\instrument_families","r")
