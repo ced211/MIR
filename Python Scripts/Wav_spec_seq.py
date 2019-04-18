@@ -54,5 +54,7 @@ class WavSpec(Sequence):
             batch_y =np.append(batch_y,self.families[self.filenames[index]])
             i +=1
         batch_y = to_categorical(np.array(batch_y),num_classes=11)
-
+        print("in get Item: " +str(i))
+        print("wav shape: " + str(self.wav_shape) + " spec shape " + str(self.spec_shape))
+        print("x shape: " + str(self.x_shape))
         return batch_x,batch_y

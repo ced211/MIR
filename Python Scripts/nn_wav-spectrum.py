@@ -14,17 +14,17 @@ if __name__ == "__main__":
     #model on spectrum
     input = Input(train.x_shape)
     spec = train.spec_shape[0] * train.spec_shape[1]
-    spec_input = Lambda(lambda x: x[:,spec:], output_shape = (spec,))(input)
+    spec_input = Lambda(lambda y: y[:,:spec], output_shape = (spec,))(input)
     spec_input = Reshape((train.spec_shape[0],train.spec_shape[1],1))(spec_input)
     base_model = load_model("../models/conv-spectrum/models-45.hdf5")
     spectrum_model = Model(inputs=base_model.input, outputs=base_model.get_layer('dense_1').output)
     spectrum_model.summary()    
     spec_out = spectrum_model(spec_input)
 
-    """
+    
     #model on raw wav audio.
     print("wav")
-    wav_input = Lambda(lambda x: x[:,:spec], output_shape = (train.wav_shape[0],)) (input) 
+    wav_input = Lambda(lambda x: x[:,spec:], output_shape = (train.wav_shape[0],)) (input) 
     wav_input = Reshape((train.wav_shape[0],1)) (wav_input)
     debug_model = Model(inputs=input,outputs=wav_input)
     debug_model.summary()     
@@ -40,12 +40,12 @@ if __name__ == "__main__":
     wav = Flatten()(wav)
     wav = Dense(128,activation = 'relu')(wav)
     wav = Dropout(0.25)(wav)
-    """
+    
 
     #merge both model
-    """ x = keras.layers.concatenate([spec_out, wav])
-    x = Dense(128,activation = 'relu')(x)"""
-    predictions = Dense(11,activation = 'softmax')(spec_out)
+    x = keras.layers.concatenate([spec_out, wav])
+    x = Dense(128,activation = 'relu')(x)
+    predictions = Dense(11,activation = 'softmax')(x)
     model = Model(inputs= input, outputs=predictions)
 
     #Only trained wav and top layer
