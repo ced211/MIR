@@ -41,7 +41,6 @@ if __name__ == "__main__":
     wav = Dense(128,activation = 'relu')(wav)
     wav = Dropout(0.25)(wav)
     
-
     #merge both model
     x = keras.layers.concatenate([spec_out, wav])
     x = Dense(128,activation = 'relu')(x)
@@ -59,22 +58,22 @@ if __name__ == "__main__":
                 metrics=['accuracy'])
     model.summary()
 
-    checkpoint = keras.callbacks.ModelCheckpoint("..\\models\\conv-spectrum\\models-{epoch:02d}" 
+    checkpoint = keras.callbacks.ModelCheckpoint("..\\models\\wav-spectrum\\models-{epoch:02d}_tune_wav" 
         + ".hdf5", monitor='val_loss', 
         verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
-    model.fit_generator(train, epochs=25, verbose=1, validation_data=valid,callbacks=[checkpoint])
+    model.fit_generator(train, epochs=50, verbose=1, validation_data=valid,callbacks=[checkpoint])
 
     #fine tune
-    """ for layer in spectrum_model.layers:
+    for layer in spectrum_model.layers:
         layer.trainable = True
 
     model.compile(loss=keras.losses.categorical_crossentropy,
                 optimizer=keras.optimizers.Adadelta(),
                 metrics=['accuracy'])
-    checkpoint = keras.callbacks.ModelCheckpoint("..\\models\\wav-spectrum\\models-{epoch:02d}" 
+    checkpoint = keras.callbacks.ModelCheckpoint("..\\models\\wav-spectrum\\models-{epoch:02d}_fine_tune" 
         + ".hdf5", monitor='val_loss', 
         verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
-    model.fit_generator(train, epochs=10, verbose=1, validation_data=valid,callbacks=[checkpoint])"""
+    model.fit_generator(train, epochs=25, verbose=1, validation_data=valid,callbacks=[checkpoint])
      
 
 

@@ -37,5 +37,5 @@ if __name__ == "__main__":
                 optimizer=keras.optimizers.Adadelta(),
                 metrics=['accuracy'])
     checkpoint = keras.callbacks.ModelCheckpoint("..\\models\\conv-spectrum\\models-{epoch:02d}" + now.strftime("%d %H:%M") + ".hdf5", monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
-    model.fit_generator(train, epochs=train.__len__(), verbose=1, validation_data=valid,callbacks=[checkpoint])
+    history = model.fit_generator(train, epochs=20, verbose=1, validation_data=valid,callbacks=[checkpoint])
     model.save("complete_model.model")

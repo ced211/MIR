@@ -5,6 +5,7 @@ import keras
 from keras.utils import Sequence
 from keras.utils import to_categorical
 from random import shuffle
+
 class Mfcc(Sequence):
     batch_size = 1000
 

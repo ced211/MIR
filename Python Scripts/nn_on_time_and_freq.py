@@ -3,11 +3,12 @@ from keras.layers import Input, Dense, Add, Lambda,Dropout,Flatten
 from keras.models import Model
 from mfcc_seq_time_freq import Seq_time_freq
 from keras.layers import Dense, Dropout
-
+from HistoryMem import HistoryMem
 import keras
 
 if __name__ == "__main__":
 
+    history = HistoryMem(filepath = "..\\models\\time_freq-spectrum\\history ")
     train = Seq_time_freq("..\\spectrum-train\\","..\\nsynth-train")
     valid = Seq_time_freq("..\\spectrum-valid\\","..\\nsynth-valid")
 
@@ -26,4 +27,4 @@ if __name__ == "__main__":
                 optimizer=keras.optimizers.Adadelta(),
                 metrics=['accuracy'])
     checkpoint = keras.callbacks.ModelCheckpoint("..\\models\\time_freq-spectrum\\models-{epoch:02d}.hdf5", monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
-    model.fit_generator(train, epochs=100, verbose=1, validation_data=valid,callbacks=[checkpoint],shuffle=True)
+    model.fit_generator(train, epochs=10, verbose=1, validation_data=valid,callbacks=[checkpoint,history],shuffle=True)

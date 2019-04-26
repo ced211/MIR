@@ -30,8 +30,6 @@ class WavSpec(Sequence):
         self.batch_size = batch_size
         x = np.concatenate((np.reshape(spec,(-1,)), np.reshape(wav,(-1,))))
         self.x_shape = x.shape
-        print("wav shape: " + str(self.wav_shape) + " spec shape " + str(self.spec_shape))
-        print("x shape: " + str(self.x_shape))
     def __len__(self):
         return int(np.ceil(len(self.filenames) / float(self.batch_size)))
     
@@ -45,8 +43,6 @@ class WavSpec(Sequence):
                 batch_x = np.concatenate((np.reshape(spec_x,(-1,)), np.reshape(wav_x,(-1))))
                 batch_y = self.families[self.filenames[index]]
                 self.x_shape = batch_x.shape
-                if wav_x.shape != self.wav_shape:
-                    print("wav shape is different in file " + filename)
             spec_x = np.load(self.spec_dir + filename + '.npy')
             wav_x,_ = librosa.load(self.wav_dir+filename+'.wav',mono=True,sr=None)
             x = np.concatenate((np.reshape(spec_x,(-1,)), np.reshape(wav_x,(-1,))))
@@ -54,7 +50,4 @@ class WavSpec(Sequence):
             batch_y =np.append(batch_y,self.families[self.filenames[index]])
             i +=1
         batch_y = to_categorical(np.array(batch_y),num_classes=11)
-        print("in get Item: " +str(i))
-        print("wav shape: " + str(self.wav_shape) + " spec shape " + str(self.spec_shape))
-        print("x shape: " + str(self.x_shape))
         return batch_x,batch_y
