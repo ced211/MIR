@@ -13,12 +13,9 @@ from Mfcc_freq_seq import FqMfccSeq
 from mfcc_time_seq import TimeMfccSeq
 from mfcc_seq_time_freq import Seq_time_freq
 import copy
-import datetime
-import time
 
 if __name__ == "__main__":
 
-	now = datetime.datetime.now()
 	#test of the spectrum model
 	test = Mfcc("..\\spectrum-test\\","..\\nsynth-test")
 	model = load_model("../models/conv-spectrum/models-02.hdf5")
