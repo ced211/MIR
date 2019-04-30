@@ -9,8 +9,8 @@ import keras
 if __name__ == "__main__":
 
     history = HistoryMem(filepath = "..\\models\\time_freq-spectrum\\history ")
-    train = Seq_time_freq("..\\spectrum-train\\","..\\nsynth-train")
-    valid = Seq_time_freq("..\\spectrum-valid\\","..\\nsynth-valid")
+    train = Seq_time_freq("..\\spectrum-train\\","..\\nsynth-train",1000,False,0.7)
+    valid = Seq_time_freq("..\\spectrum-train\\","..\\nsynth-train",1000,True,0.7)
 
     input_train = Input(shape=[train.x_shape[0]])
     input_valid = Input(shape=[valid.x_shape[0]])
@@ -27,4 +27,4 @@ if __name__ == "__main__":
                 optimizer=keras.optimizers.Adadelta(),
                 metrics=['accuracy'])
     checkpoint = keras.callbacks.ModelCheckpoint("..\\models\\time_freq-spectrum\\models-{epoch:02d}.hdf5", monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
-    model.fit_generator(train, epochs=10, verbose=1, validation_data=valid,callbacks=[checkpoint,history],shuffle=True)
+    model.fit_generator(train, epochs=50, verbose=1, validation_data=valid,callbacks=[checkpoint,history],shuffle=True)

@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 def get_train_test(split_ratio=0.7, random_state=42):
     file = open("C:\\Users\\cedri\\Documents\\deep_learning_project\\labels","r")
     labels = json.load(file)
-    mfccs = "C:\\Users\\cedri\\Documents\\deep_learning_project\\mfccs\\"
+    mfccs = "C:\\Users\\cedri\\Documents\\deep_learning_project\\spectrum\\"
     i = 0
     for filename, label in labels.items():
         filename,_,_ = filename.partition(".wav")
@@ -39,12 +39,6 @@ def get_train_test(split_ratio=0.7, random_state=42):
         print("error")
     return train_test_split(X, y, test_size= (1 - split_ratio), random_state=random_state, shuffle=True)
 
-def plotX(X):
-    fig, ax = plt.subplots()
-    min = np.min(X)
-    max = np.max(X)
-    ax.matshow(X, cmap=plt.cm.Blues)
-
 if __name__ == "__main__":
 
     X_train, X_test, y_train, y_test = get_train_test()
@@ -66,4 +60,6 @@ if __name__ == "__main__":
                 optimizer=keras.optimizers.Adadelta(),
                 metrics=['accuracy'])
 
-    model.fit(X_train, y_train_hot, batch_size=100, epochs=200, verbose=1, validation_data=(X_test, y_test_hot))
+    history = model.fit(X_train, y_train_hot, batch_size=100, epochs=200, verbose=1, validation_data=(X_test, y_test_hot))
+    with open("10-instru-history-spectrum", 'w') as file_pi:
+        json.dump(history.history, file_pi)

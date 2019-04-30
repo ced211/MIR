@@ -15,8 +15,8 @@ import copy
 
 if __name__ == "__main__":
 
-    train = FqMfccSeq("..\\spectrum-train\\","..\\nsynth-train")
-    valid = FqMfccSeq("..\\spectrum-valid\\","..\\nsynth-valid")
+    train = FqMfccSeq("..\\spectrum-train\\","..\\nsynth-train",False,0.7)
+    valid = FqMfccSeq("..\\spectrum-train\\","..\\nsynth-train",True,0.7)
     model = Sequential()
     model.add(Conv1D(32, kernel_size= 4, activation='relu', input_shape=(train.x_shape[0],1)))
     model.add(MaxPooling1D(pool_size=4))

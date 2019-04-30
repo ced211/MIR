@@ -4,23 +4,30 @@ import json
 import keras
 from keras.utils import Sequence
 from keras.utils import to_categorical
-from random import shuffle
-
+import random
 class FqMfccSeq(Sequence):
     batch_size = 1000
 
-    def __init__(self,mfcc_directory,labels_directory):
+    def __init__(self,mfcc_directory,labels_directory,is_valid=False,ratio=0.7):
         file = open(labels_directory + "\\instrument_families","r")
         self.families = json.load(file)
         self.filenames = list(self.families.keys())
         self.mfcc_dir = mfcc_directory
         filename,_,_ = self.filenames[0].partition(".wav")
-        shuffle(self.filenames)
+        random.seed(11)
+        random.shuffle(self.filenames)
+        bound = int(round(len(self.filenames)*ratio))
+        self.train = self.filenames[:bound]
+        self.valid = self.filenames[bound:]
         x = np.sum(np.load(self.mfcc_dir + filename + ".npy"),0)
         self.x_shape = x.shape
+        self.isvalid = is_valid
 
     def __len__(self):
-        return int(np.ceil(len(self.filenames) / float(self.batch_size)))
+        if self.isvalid:
+            return int(np.ceil(len(self.valid) / float(self.batch_size)))
+        else:
+            return int(np.ceil(len(self.train) / float(self.batch_size)))
 
     def __getitem__(self, index):
         i = 0

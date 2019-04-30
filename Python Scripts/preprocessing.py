@@ -22,7 +22,7 @@ def wav2spectrum(file_path, max_pad_len=50):
     return spectrum
 
 if __name__ == "__main__":
-    directory = "..\\..\\nsynth-valid\\audio"
+    directory = "../training_set"
 
     for filename in os.listdir(directory):
         if filename.endswith(".wav"):
@@ -31,6 +31,6 @@ if __name__ == "__main__":
             #mfcc_outpath = "mfccs\\" + file + ".npy"
             #mfccs = wav2mfcc(input_file)
             #np.save(mfcc_outpath,mfccs)
-            spectrum_outpath = "..\\spectrum-valid\\" + file + ".npy"
+            spectrum_outpath = "..\\spectrum\\" + file + ".npy"
             spectrum = wav2spectrum(input_file)
             np.save(spectrum_outpath,spectrum)

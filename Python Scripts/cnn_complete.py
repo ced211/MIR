@@ -3,7 +3,7 @@ import os
 import json
 import matplotlib.pyplot as plt
 from matplotlib import cm
-
+from HistoryMem import HistoryMem
 import time
 import keras
 from keras.utils import to_categorical
@@ -17,6 +17,8 @@ import datetime
 #See https://blog.manash.me/building-a-dead-simple-word-recognition-engine-using-convnet-in-keras-25e72c19c12b
 
 if __name__ == "__main__":
+
+    history = HistoryMem(filepath = "..\\models\\conv-spectrum\\history ")
 
     now = datetime.datetime.now()
     train = Mfcc("..\\spectrum-train\\","..\\nsynth-train")
@@ -37,5 +39,5 @@ if __name__ == "__main__":
                 optimizer=keras.optimizers.Adadelta(),
                 metrics=['accuracy'])
     checkpoint = keras.callbacks.ModelCheckpoint("..\\models\\conv-spectrum\\models-{epoch:02d}" + now.strftime("%d %H:%M") + ".hdf5", monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
-    history = model.fit_generator(train, epochs=20, verbose=1, validation_data=valid,callbacks=[checkpoint])
+    history = model.fit_generator(train, epochs=40, verbose=1, validation_data=valid,callbacks=[checkpoint,history])
     model.save("complete_model.model")
